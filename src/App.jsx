@@ -1,46 +1,448 @@
-import { useState } from "react";
-import portrait from "./assets/mallikarjuna.png";
+import { useEffect, useState } from "react";
+import portrait from "./assets/mallikarjuna-portrait.png";
 
-const skills = ["React", "JavaScript", "TypeScript", "Tailwind CSS", "HTML5", "CSS3", "Responsive UI", "Git & GitHub", "REST APIs", "Bootstrap", "Node.js", "MongoDB"];
-const certifications = ["ICRCSET 2025", "AWS Cloud Virtual Internship", "Digital Productivity"];
-const projects = [
-  { title: "Blockchain AI Data Security", kind: "Full-stack application", description: "A secure data-storage system combining encrypted authentication with a blockchain-inspired audit trail.", stack: ["Python", "Flask", "SQLite"], mark: "01" },
-  { title: "Mourya Pizza", kind: "Responsive web experience", description: "A restaurant website designed around clear menus, responsive layouts, and easy discovery.", stack: ["HTML", "CSS", "Responsive UI"], mark: "02" },
+const profile = {
+  name: "Mallikarjuna Gangula",
+  role: "Frontend Developer",
+  company: "Static Val Company",
+  email: "mallikarjunagangula48@gmail.com",
+  linkedin: "https://www.linkedin.com/in/mallikarjunagangula",
+  github: "https://github.com/mallikarjunagangula15",
+  resume: "/Mallikarjuna_Gangula_Resume.pdf",
+};
+
+const navigation = [
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Contact", href: "#contact" },
+  { label: "Education", href: "#education" },
+  { label: "Certificates", href: "#certificates" },
 ];
 
-function Arrow() { return <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>; }
+const skills = [
+  "React",
+  "JavaScript",
+  "TypeScript",
+  "Tailwind CSS",
+  "HTML5",
+  "CSS3",
+  "Responsive UI",
+  "Git & GitHub",
+  "REST APIs",
+  "Bootstrap",
+  "Node.js",
+  "MongoDB",
+];
+
+const technologies = [
+  { name: "HTML5", mark: "5", color: "text-orange-400" },
+  { name: "CSS3", mark: "3", color: "text-sky-400" },
+  { name: "JavaScript", mark: "JS", color: "text-amber-300" },
+  { name: "React", mark: "R", color: "text-cyan-300" },
+  { name: "Bootstrap", mark: "B", color: "text-violet-400" },
+  { name: "Git", mark: "G", color: "text-orange-500" },
+  { name: "VS Code", mark: "</>", color: "text-sky-500" },
+];
+
+const projects = [
+  {
+    title: "fee_payments",
+    category: "Java application",
+    description:
+      "A payment-focused project for managing fee payment workflows.",
+    focus: "Fee payment processing",
+    technologies: ["Java"],
+    number: "01",
+    url: "https://github.com/mallikarjunagangula15/fee_payments",
+  },
+  {
+    title: "blockchain-ai",
+    category: "Python application",
+    description:
+      "A project exploring the use of blockchain and AI in an application.",
+    focus: "Blockchain and AI",
+    technologies: ["Python"],
+    number: "02",
+    url: "https://github.com/mallikarjunagangula15/blockchain-ai",
+  },
+  {
+    title: "GENAI-Resume-Analyzer",
+    category: "AI application",
+    description:
+      "An AI-powered tool for analyzing resumes.",
+    focus: "Resume analysis with generative AI",
+    technologies: ["Python", "Generative AI"],
+    number: "03",
+    url: "https://github.com/mallikarjunagangula15/GENAI-Resume-Analyzer",
+  },
+  {
+    title: "student_management_system",
+    category: "Python application",
+    description:
+      "A system for organizing and managing student information.",
+    focus: "Student record management",
+    technologies: ["Python"],
+    number: "04",
+    url: "https://github.com/mallikarjunagangula15/student_management_system",
+  },
+];
+
+const experience = [
+  {
+    company: profile.company,
+    period: "Present",
+    role: "Frontend Developer",
+    type: "Current role",
+    description:
+      "Developing responsive product interfaces and reusable UI components, with attention to visual consistency, usability, and maintainable implementation.",
+  },
+  {
+    company: "Cognifyz Technologies",
+    period: "Nov-Dec 2025",
+    role: "Frontend Development Intern",
+    type: "Internship",
+    description:
+      "Worked on responsive web interfaces using HTML, CSS, JavaScript, and React, translating requirements into reusable components and consistent layouts.",
+  },
+];
+
+const certifications = [
+  { title: "ICRCSET 2025", detail: "Technical learning and achievement" },
+  { title: "AWS Cloud Virtual Internship", detail: "Cloud learning experience" },
+  { title: "Digital Productivity", detail: "Professional development" },
+];
+
+function ArrowIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      fill="none"
+      className="h-4 w-4"
+    >
+      <path
+        d="M4 10h12M11 5l5 5-5 5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SectionHeading({ eyebrow, title, description }) {
+  return (
+    <div className="section-heading">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      {description ? <p className="section-description">{description}</p> : null}
+    </div>
+  );
+}
+
+function ExternalLink({ href, children, className = "" }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  );
+}
+
+function ProjectCard({ project }) {
+  return (
+    <article className="project-card">
+      <div className="flex items-start justify-between gap-4">
+        <span className="project-number">{project.number}</span>
+        <span className="text-right text-sm text-slate-400">{project.category}</span>
+      </div>
+      <h3>{project.title}</h3>
+      <p className="mt-3 leading-7 text-slate-300">{project.description}</p>
+      <p className="project-focus">Focus: {project.focus}</p>
+      <ul className="mt-6 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
+        {project.technologies.map((technology) => (
+          <li key={technology} className="technology-tag">
+            {technology}
+          </li>
+        ))}
+      </ul>
+      <ExternalLink
+        href={project.url}
+        className="mt-8 inline-flex w-fit items-center gap-2 text-sm font-bold text-sky-200 transition hover:text-white"
+      >
+        View repository <ArrowIcon />
+      </ExternalLink>
+    </article>
+  );
+}
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const links = ["About", "Skills", "Experience", "Projects", "Certificates", "Education", "Contact"];
-  return <main className="min-h-screen overflow-x-hidden bg-[#075985] text-slate-100 selection:bg-sky-200 selection:text-[#082f49]">
-    <div className="fixed inset-0 -z-0 bg-[radial-gradient(circle_at_12%_8%,rgba(125,211,252,.3),transparent_24%),radial-gradient(circle_at_88%_24%,rgba(14,165,233,.22),transparent_22%),linear-gradient(135deg,#075985_0%,#0c4a6e_48%,#082f49_100%)]" />
-    <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 lg:px-8">
-      <a href="#home" className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-full border border-sky-200/40 bg-sky-300 text-xs font-black text-[#082f49]">MG</span><span className="text-base font-bold tracking-tight text-white">Mallikarjuna<span className="text-sky-300">.Gangula</span></span></a>
-      <nav className="hidden items-center gap-6 text-sm font-medium text-slate-300 lg:flex">{links.map((link) => <a key={link} href={`#${link.toLowerCase()}`} className="transition hover:text-teal-300">{link}</a>)}</nav>
-      <a href="#contact" className="hidden rounded-full border border-teal-300/70 px-4 py-2 text-sm font-semibold text-teal-200 transition hover:bg-teal-300 hover:text-[#082126] md:block">Let&apos;s talk</a>
-      <button onClick={() => setMenuOpen(!menuOpen)} className="rounded-lg border border-white/15 p-2 lg:hidden" aria-label="Toggle navigation"><span className="block h-0.5 w-5 bg-white" /><span className="my-1 block h-0.5 w-5 bg-white" /><span className="block h-0.5 w-5 bg-white" /></button>
-    </header>
-    {menuOpen && <nav className="relative z-20 mx-6 rounded-2xl border border-white/10 bg-[#0c2a2d] p-4 lg:hidden">{links.map((link) => <a onClick={() => setMenuOpen(false)} key={link} href={`#${link.toLowerCase()}`} className="block rounded-lg px-3 py-2 text-slate-200 hover:bg-white/5">{link}</a>)}</nav>}
 
-    <section id="home" className="relative z-10 mx-auto grid max-w-6xl items-start gap-10 px-6 pb-20 pt-10 sm:grid-cols-[minmax(0,1fr)_16rem] md:grid-cols-[minmax(0,1fr)_18rem] md:gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8 lg:pb-28 lg:pt-14">
-      <div><p className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[.2em] text-sky-200"><span className="h-2 w-2 animate-pulse rounded-full bg-sky-300" /> Frontend Developer at Staticval</p><h1 className="max-w-2xl text-3xl font-black leading-tight tracking-normal text-white sm:text-4xl lg:text-5xl">Frontend developer creating <span className="text-sky-200">clear, useful</span> digital experiences.</h1><p className="mt-6 max-w-xl text-base leading-7 text-slate-100">Hi, I&apos;m <span className="font-bold text-sky-200">Mallikarjuna.Gangula</span>. I build responsive, accessible interfaces that give products a polished and purposeful presence.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#projects" className="inline-flex items-center gap-2 rounded-full bg-sky-300 px-5 py-3 text-sm font-bold text-[#082f49] transition hover:-translate-y-0.5 hover:bg-sky-200">View my work <Arrow /></a><a href="/Mallikarjuna_Gangula_Resume.pdf" download className="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-3 text-sm font-semibold text-white transition hover:border-sky-200 hover:text-sky-100">Download resume <Arrow /></a></div><div className="mt-11 flex gap-8 border-t border-white/20 pt-6"><div><p className="text-xl font-bold text-white">02+</p><p className="mt-1 text-xs text-sky-100/70">Projects built</p></div><div><p className="text-xl font-bold text-white">12</p><p className="mt-1 text-xs text-sky-100/70">Core technologies</p></div><div><p className="text-xl font-bold text-white">03</p><p className="mt-1 text-xs text-sky-100/70">Certifications</p></div></div></div>
-      <div className="relative mx-auto w-full max-w-[20rem] self-start"><div className="absolute -inset-4 rounded-[2rem] bg-sky-300/25 blur-2xl" /><div className="relative overflow-hidden rounded-[1.75rem] border border-white/25 bg-sky-950/30 p-2 shadow-2xl shadow-sky-950/30"><img src={portrait} alt="Mallikarjuna Gangula" className="aspect-[4/5] w-full rounded-[1.35rem] object-cover object-top" /></div><div className="mt-4 border-l-2 border-sky-300 pl-3"><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-sky-200">Currently</p><p className="mt-1 text-sm font-semibold text-white">Frontend Developer - Staticval</p></div></div>
-    </section>
+  useEffect(() => {
+    document.title = `${profile.name} | ${profile.role}`;
 
-    <section id="about" className="relative z-10 border-y border-white/10 bg-white/[.035]"><div className="mx-auto grid max-w-6xl gap-8 px-6 py-16 lg:grid-cols-[.7fr_1.3fr] lg:px-8"><p className="text-sm font-bold uppercase tracking-[.2em] text-teal-300">01 / About me</p><div><h2 className="text-3xl font-bold tracking-tight text-white">Thoughtful interfaces, built for people.</h2><p className="mt-5 max-w-2xl leading-7 text-slate-300">I am a frontend developer focused on turning ideas into smooth, responsive experiences. I enjoy the details, from clear content hierarchy to the small interactions that make an interface feel effortless.</p><p className="mt-4 max-w-2xl leading-7 text-slate-400">My foundation is React, JavaScript, HTML, CSS and Bootstrap, and I am continuously expanding into full-stack development.</p></div></div></section>
+    let description = document.querySelector('meta[name="description"]');
+    if (!description) {
+      description = document.createElement("meta");
+      description.name = "description";
+      document.head.appendChild(description);
+    }
+    description.content =
+      "Portfolio of Mallikarjuna Gangula, Frontend Developer building responsive web experiences with React and modern web technologies.";
+  }, []);
 
-    <section id="skills" className="relative z-10 mx-auto max-w-6xl px-6 py-20 lg:px-8"><p className="text-sm font-bold uppercase tracking-[.2em] text-teal-300">02 / Toolkit</p><h2 className="mt-3 text-3xl font-bold tracking-tight text-white">Tools I work with.</h2><div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{skills.map((skill, index) => <div key={skill} className="flex min-h-24 flex-col justify-between rounded-2xl border border-white/10 bg-white/[.045] p-5 transition hover:-translate-y-1 hover:border-teal-300/40 hover:bg-teal-300/10"><span className="text-xs font-bold text-teal-300/80">{String(index + 1).padStart(2, "0")}</span><p className="font-semibold text-white">{skill}</p></div>)}</div></section>
+  useEffect(() => {
+    if (!menuOpen) return undefined;
 
-    <section id="experience" className="relative z-10 border-y border-white/10 bg-[#062025]"><div className="mx-auto max-w-6xl px-6 py-16 lg:px-8"><p className="text-sm font-bold uppercase tracking-[.2em] text-teal-300">03 / Experience</p><div className="mt-9 space-y-5"><article className="grid gap-5 rounded-3xl border border-white/10 bg-white/[.04] p-7 md:grid-cols-[1fr_auto]"><div><p className="text-sm text-teal-200">Staticval - Present</p><h2 className="mt-2 text-2xl font-bold text-white">Frontend Developer</h2><p className="mt-4 max-w-2xl leading-7 text-slate-300">Developing modern, responsive frontend interfaces with a focus on usability, visual consistency, and dependable implementation.</p></div><span className="h-fit rounded-full bg-teal-300/10 px-4 py-2 text-sm font-semibold text-teal-200">Current role</span></article><article className="grid gap-5 rounded-3xl border border-white/10 bg-white/[.04] p-7 md:grid-cols-[1fr_auto]"><div><p className="text-sm text-teal-200">Cognifyz Technologies - Nov-Dec 2025</p><h2 className="mt-2 text-2xl font-bold text-white">Frontend Development Intern</h2><p className="mt-4 max-w-2xl leading-7 text-slate-300">Built responsive web interfaces with HTML, CSS, JavaScript and React, including reusable UI components.</p></div><span className="h-fit rounded-full bg-teal-300/10 px-4 py-2 text-sm font-semibold text-teal-200">Internship</span></article></div></div></section>
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
 
-    <section id="projects" className="relative z-10 mx-auto max-w-6xl px-6 py-20 lg:px-8"><p className="text-sm font-bold uppercase tracking-[.2em] text-teal-300">04 / Selected work</p><h2 className="mt-3 text-3xl font-bold tracking-tight text-white">A few things I&apos;ve made.</h2><div className="mt-9 grid gap-6 md:grid-cols-2">{projects.map((project) => <article key={project.title} className="group rounded-3xl border border-white/10 bg-white/[.045] p-7 transition hover:border-teal-300/40"><div className="flex items-start justify-between"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-300 text-xs font-black text-[#082126]">{project.mark}</span><span className="text-sm text-slate-400">{project.kind}</span></div><h3 className="mt-12 text-2xl font-bold text-white">{project.title}</h3><p className="mt-3 leading-7 text-slate-300">{project.description}</p><div className="mt-6 flex flex-wrap gap-2">{project.stack.map((item) => <span key={item} className="rounded-full border border-white/10 px-3 py-1 text-xs font-medium text-slate-300">{item}</span>)}</div></article>)}</div></section>
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
 
-    <section id="certificates" className="relative z-10 border-y border-white/10 bg-white/[.035]"><div className="mx-auto max-w-6xl px-6 py-16 lg:px-8"><p className="text-sm font-bold uppercase tracking-[.2em] text-teal-300">05 / Certifications</p><h2 className="mt-3 text-3xl font-bold tracking-tight text-white">Continuous learning.</h2><div className="mt-9 grid gap-4 sm:grid-cols-3">{certifications.map((certificate, index) => <article key={certificate} className="rounded-2xl border border-white/10 bg-[#0b2b2e] p-6"><p className="text-sm font-bold text-teal-300">{String(index + 1).padStart(2, "0")}</p><h3 className="mt-8 text-lg font-bold text-white">{certificate}</h3><p className="mt-2 text-sm text-slate-400">Certificate of completion</p></article>)}</div></div></section>
+  const closeMenu = () => setMenuOpen(false);
 
-    <section id="education" className="relative z-10 mx-auto max-w-6xl px-6 py-20 lg:px-8"><p className="text-sm font-bold uppercase tracking-[.2em] text-teal-300">06 / Education & personal details</p><div className="mt-8 grid gap-6 md:grid-cols-2"><article className="rounded-3xl border border-white/10 bg-white/[.045] p-7"><h2 className="text-2xl font-bold text-white">Education</h2><p className="mt-4 leading-7 text-slate-300">Education details will be added once verified, keeping this portfolio accurate and professional.</p></article><article className="rounded-3xl border border-white/10 bg-white/[.045] p-7"><h2 className="text-2xl font-bold text-white">Professional profile</h2><div className="mt-4 flex flex-wrap gap-x-5 gap-y-3"><a href="http://www.linkedin.com/in/mallikarjunagangula" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200">LinkedIn <Arrow /></a><a href="https://github.com/arjun15-prop" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-teal-300 hover:text-teal-200">GitHub <Arrow /></a></div><p className="mt-4 text-sm text-slate-400">Frontend Developer at Staticval</p></article></div></section>
+  return (
+    <main id="main-content" className="min-h-screen overflow-x-hidden text-slate-100">
+      <div className="site-background" aria-hidden="true" />
 
-    <section id="contact" className="relative z-10 px-6 pb-20 lg:px-8"><div className="mx-auto max-w-6xl rounded-[2rem] border border-teal-200/20 bg-teal-300 px-7 py-10 text-[#082126] sm:p-11"><p className="text-sm font-bold uppercase tracking-[.2em] text-[#0a5b58]">07 / Contact</p><div className="mt-5 flex flex-col justify-between gap-7 md:flex-row md:items-end"><div><h2 className="max-w-xl text-3xl font-black tracking-[-.045em] sm:text-4xl">Let&apos;s build something people enjoy using.</h2><p className="mt-4 max-w-lg text-[#0d4b4d]">Have an idea, project, or opportunity to discuss? Send me an email and let&apos;s talk.</p><a href="mailto:mallikarjunagangula48@gmail.com" className="mt-3 inline-block text-sm font-semibold text-[#0a5b58] underline decoration-[#0a5b58]/40 underline-offset-4 hover:text-[#082126]">mallikarjunagangula48@gmail.com</a></div><a href="mailto:mallikarjunagangula48@gmail.com?subject=Portfolio%20enquiry%20for%20Mallikarjuna" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#082126] px-6 py-3.5 font-bold text-white transition hover:bg-[#10383b]">Send an email <Arrow /></a></div></div></section>
-    <footer className="relative z-10 border-t border-white/10 px-6 py-8 text-center text-sm text-slate-500">Copyright 2026 Mallikarjuna Gangula. Crafted with React and Tailwind CSS.</footer>
-  </main>;
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+
+      <header className="site-header">
+        <a href="#home" className="brand" onClick={closeMenu} aria-label={`${profile.name}, home`}>
+          <span className="brand-mark">MG</span>
+          <span>
+            Mallikarjuna <span className="text-sky-300">Gangula</span>
+          </span>
+        </a>
+
+        <nav className="desktop-navigation" aria-label="Main navigation">
+          {navigation.map((item) => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <a href="#contact" className="header-cta">
+          Let&apos;s talk
+        </a>
+
+        <button
+          type="button"
+          className="mobile-menu-button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </header>
+
+      {menuOpen && (
+        <nav id="mobile-navigation" className="mobile-navigation" aria-label="Mobile navigation">
+          {navigation.map((item) => (
+            <a key={item.href} href={item.href} onClick={closeMenu}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      )}
+
+      <section id="home" className="hero-section page-container">
+        <div className="hero-copy">
+          <p className="availability-label">
+            <span aria-hidden="true" /> {profile.role} at {profile.company}
+          </p>
+          <h1>
+            React Frontend Developer <span>building toward Python full-stack.</span>
+          </h1>
+          <p className="hero-description">
+            Hi, I&apos;m <strong>{profile.name}</strong>. I build responsive interfaces and reusable UI
+            components, with a focus on clear user experiences and maintainable frontend code.
+          </p>
+          <div className="hero-actions">
+            <a href="#projects" className="primary-button">
+              Explore projects <ArrowIcon />
+            </a>
+            <a href={profile.resume} download className="secondary-button">
+              Download resume <ArrowIcon />
+            </a>
+          </div>
+          <div className="hero-stats" aria-label="Portfolio overview">
+            <div>
+              <strong>04</strong>
+              <span>Featured projects</span>
+            </div>
+            <div>
+              <strong>12</strong>
+              <span>Listed skills</span>
+            </div>
+            <div>
+              <strong>03</strong>
+              <span>Listed certificates</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-profile">
+          <div className="portrait-frame">
+            <img
+              src={portrait}
+              alt={`Portrait of ${profile.name}`}
+              className="portrait-image"
+              fetchPriority="high"
+            />
+          </div>
+          <div className="current-role">
+            <p>Currently</p>
+            <strong>{profile.role} {profile.company}</strong>
+          </div>
+        </div>
+
+        <aside className="technology-panel" aria-label="Core technologies">
+          <div className="technology-intro">
+            <p className="eyebrow">Core technologies</p>
+            <p>Tools used to build modern web experiences.</p>
+          </div>
+          <ul className="technology-list">
+            {technologies.map((technology) => (
+              <li key={technology.name} title={technology.name}>
+                <span className={`technology-mark ${technology.color}`}>{technology.mark}</span>
+                <span>{technology.name}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </section>
+
+      <section id="about" className="section-band">
+        <div className="page-container about-layout">
+          <SectionHeading eyebrow="01 / About me" title="About Me" />
+          <p className="body-copy about-copy">
+            Hi, I&apos;m {profile.name}, a {profile.role} specializing in React.js and modern web
+            technologies. I build responsive, accessible, and high-performance web applications
+            with a focus on clean code, reusable components, and exceptional user experiences.
+          </p>
+        </div>
+      </section>
+
+      <section id="skills" className="page-container content-section">
+        <SectionHeading eyebrow="02 / Toolkit" title="Tools I work with." />
+        <ul className="skills-grid">
+          {skills.map((skill, index) => (
+            <li key={skill} className="skill-card">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{skill}</strong>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="experience" className="section-band dark-band">
+        <div className="page-container content-section">
+          <SectionHeading eyebrow="03 / Experience" title="Where I&apos;ve contributed." />
+          <div className="experience-list">
+            {experience.map((item) => (
+              <article className="experience-card" key={`${item.company}-${item.role}`}>
+                <div>
+                  <p className="experience-meta">{item.company}</p>
+                  <h3>{item.role}</h3>
+                  <p className="body-copy mt-4">{item.description}</p>
+                </div>
+                <span className="experience-type">{item.type}</span>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" className="page-container content-section">
+        <SectionHeading
+          eyebrow="04 / Selected work"
+          title="Projects that show how I build."
+          description="A selection of projects and the technologies used to explore their functionality and user experience."
+        />
+        <div className="projects-grid">
+          {projects.map((project) => (
+            <ProjectCard key={project.title} project={project} />
+          ))}
+        </div>
+      </section>
+
+      <section id="contact" className="page-container contact-section">
+        <div className="contact-panel">
+          <p className="eyebrow">05 / Get in touch</p>
+          <div className="contact-content">
+            <div>
+              <h2>Let&apos;s build something people enjoy using.</h2>
+              <p>Have an opportunity, project, or collaboration in mind? I&apos;d love to hear from you. Let&apos;s discuss how we can create a thoughtful digital experience.</p>
+              <a className="contact-email" href={`mailto:${profile.email}`}>
+                {profile.email}
+              </a>
+            </div>
+            <a
+              className="contact-button"
+              href={`mailto:${profile.email}?subject=${encodeURIComponent("Portfolio enquiry")}`}
+            >
+              Send an email <ArrowIcon />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="education" className="page-container content-section">
+        <SectionHeading eyebrow="06 / Education" title="My academic background." />
+        <div className="two-column-grid">
+          <article className="info-card education-card">
+            <p className="card-kicker">Bachelor of Technology</p>
+            <h3>Computer Engineering</h3>
+            <p className="education-school">JNTU Kakinada</p>
+            <div className="education-meta">
+              <span>July 2022 - March 2025</span>
+              <span className="gpa-badge">7.3 CGPA</span>
+            </div>
+          </article>
+          <article className="info-card profile-card">
+            <p className="card-kicker">Connect</p>
+            <h3>Professional profiles</h3>
+            <p className="muted-copy mt-3">Find me online and explore my work.</p>
+            <div className="profile-links">
+              <ExternalLink href={profile.linkedin}>LinkedIn <ArrowIcon /></ExternalLink>
+              <ExternalLink href={profile.github}>GitHub <ArrowIcon /></ExternalLink>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="certificates" className="section-band">
+        <div className="page-container content-section">
+          <SectionHeading eyebrow="07 / Certifications" title="Continuous learning." />
+          <ul className="certificates-grid">
+            {certifications.map((certificate, index) => (
+              <li className="certificate-card" key={certificate.title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{certificate.title}</h3>
+                <p>{certificate.detail}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <p>Copyright {new Date().getFullYear()} {profile.name}. Built with React and Tailwind CSS.</p>
+      </footer>
+    </main>
+  );
 }
